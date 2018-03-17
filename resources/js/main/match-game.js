@@ -46,8 +46,36 @@ MatchGame.generateCardValues = function () {
 */
 
 MatchGame.renderCards = function(cardValues, $game) {
+  // $("#game").empty();
+  $game.empty();
 
+  for(var i = 0; i < cardValues.length; i++) {
+    var $card = $("<div class=\"col-xs-3 card\"></div>");
+    $card.data("value", cardValues[i]);
+
+  }
 };
+
+function createCard(value) {
+  return card = {
+    value: value,
+    color: getColorByValue(value),
+    flipped: false
+  };
+}
+
+function getColorByValue(value) {
+  var colors = ["hsl(25, 85%, 65%);", "hsl(55, 85%, 65%);",
+"hsl(90, 85%, 65%);", "hsl(160, 85%, 65%);", "hsl(220, 85%, 65%);",
+"hsl(265, 85%, 65%);", "hsl(310, 85%, 65%);", "hsl(360, 85%, 65%);"];
+
+  if (value > 0 && < 9) {
+    return colors[value-1];
+  }
+
+  throw console.error("Unexpected value '" + value +"'");
+}
+
 
 /*
   Flips over a given card and checks to see if two cards are flipped over.
