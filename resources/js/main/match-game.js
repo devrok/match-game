@@ -1,8 +1,8 @@
-
-
 $(document).ready(function() {
+  var cardValues = MatchGame.generateCardValues();
+  var $game = $("#game");
 
-
+  MatchGame.renderCards(cardValues,$game)
 });
 
 
@@ -51,8 +51,9 @@ MatchGame.renderCards = function(cardValues, $game) {
 
   for(var i = 0; i < cardValues.length; i++) {
     var $card = $("<div class=\"col-xs-3 card\"></div>");
-    $card.data("value", cardValues[i]);
+    $card.data("value", createCard(cardValues[i]));
 
+    $game.append($card);
   }
 };
 
@@ -69,7 +70,7 @@ function getColorByValue(value) {
 "hsl(90, 85%, 65%);", "hsl(160, 85%, 65%);", "hsl(220, 85%, 65%);",
 "hsl(265, 85%, 65%);", "hsl(310, 85%, 65%);", "hsl(360, 85%, 65%);"];
 
-  if (value > 0 && < 9) {
+  if (value > 0 && value < 9) {
     return colors[value-1];
   }
 
