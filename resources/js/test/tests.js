@@ -66,14 +66,14 @@ MatchGameTests.testRenderCards = function(errors) {
 
   $cards.each(function(cardIndex, card) {
     var $card = $(card);
-    if (!$card.data('value')) {
-      errors.push("renderCards: All cards should have a data attribute called 'value'.");
+    if (!$card.data('cardData')) {
+      errors.push("renderCards: All cards should have a data attribute called 'cardData'.");
     }
-    if ($card.data('value') !== cardValues[cardIndex]) {
-      errors.push("renderCards: Card data 'value' should equal corresponding value in cardValues.");
+    if ($card.data('cardData').value !== cardValues[cardIndex]) {
+      errors.push("renderCards: Card data 'cardData' should equal corresponding value in cardValues.");
     }
 
-    if (!$card.data('color')) {
+    if (!$card.data('cardData').color) {
       errors.push("renderCards: All cards should have a data attribute called 'color'.");
     }
   });
