@@ -5,9 +5,7 @@ $(document).ready(function() {
   MatchGame.renderCards(cardValues,$game)
 });
 
-
 var MatchGame = {};
-
 /*
   Sets up a new game after HTML document has loaded.
   Renders a 4x4 board of cards.
@@ -16,7 +14,6 @@ var MatchGame = {};
 /*
   Generates and returns an array of matching card values.
  */
-
 MatchGame.generateCardValues = function () {
   var valuePairs = [];
 
@@ -29,11 +26,11 @@ MatchGame.generateCardValues = function () {
 
   while (valuePairs.length > 0) {
     var randIndex = Math.floor(Math.random() * valuePairs.length);
-    console.log(randIndex);
+    // console.log(randIndex);
     newArray.push(valuePairs[randIndex]);
     valuePairs.splice(randIndex,1);
-    console.log("Old: " + valuePairs);
-    console.log("New: " + newArray);
+    // console.log("Old: " + valuePairs);
+    // console.log("New: " + newArray);
   }
 
   return newArray;
@@ -44,17 +41,24 @@ MatchGame.generateCardValues = function () {
   Converts card values to jQuery card objects and adds them to the supplied game
   object.
 */
-
 MatchGame.renderCards = function(cardValues, $game) {
   // $("#game").empty();
   $game.empty();
+  $game.data("flippedCards", []);
 
   for(var i = 0; i < cardValues.length; i++) {
     var $card = $("<div class=\"col-xs-3 card\"></div>");
-    $card.data("value", createCard(cardValues[i]));
+    $card.data("cardData", createCard(cardValues[i]));
 
     $game.append($card);
   }
+
+  $("#game .card").click(function (){
+    var $game = $("#game");
+    var flippedCards = $game.data("flippedCards");
+
+    MatchGame.flipCard($(this), $game);
+  });
 };
 
 function createCard(value) {
@@ -84,5 +88,35 @@ function getColorByValue(value) {
  */
 
 MatchGame.flipCard = function($card, $game) {
+  var cardData = $card.data("cardData");
+  var flippedCards = $game.data("flippedCards");
 
+  if (cardData.flipped) {
+    return;
+  }
+
+  if (!cardData.flipped) {
+    // set to flipped
+    updateCard($card, cardData, true, cardData.color, cardData.value);
+    flippedCards.push(cardData);
+  }
+
+  if (flippedCards.length === 2) {
+    if (flippedCards[0].value === flippedCards[1].value) {
+      updateCard($card, cardData, true, "rgb(153, 153, 153);", "");
+    }
+    else {
+      // reset card
+      updateCard($card, cardData, false, "rgb(32, 64, 86);", "");
+    }
+    // reset array of flipped cards
+    $game.data("flippedCards", []);
+  }
 };
+
+function updateCard($card, cardData, newFlipValue, newColorValue, newValue) {
+  cardData.flipped = newFlipValue;
+  $card.css("background-color", newColorValue);
+  $card.text(newValue);
+  $card.Data("cardData", cardData);
+}

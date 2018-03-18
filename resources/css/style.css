@@ -57,6 +57,7 @@ p {
 }
 
 .card {
+  color: #ffffff;
   height: 12.5rem;
   border-radius: 8px;
   border: 4px solid #ffffff;
