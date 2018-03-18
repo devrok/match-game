@@ -70,9 +70,9 @@ function createCard(value) {
 }
 
 function getColorByValue(value) {
-  var colors = ["hsl(25, 85%, 65%);", "hsl(55, 85%, 65%);",
-"hsl(90, 85%, 65%);", "hsl(160, 85%, 65%);", "hsl(220, 85%, 65%);",
-"hsl(265, 85%, 65%);", "hsl(310, 85%, 65%);", "hsl(360, 85%, 65%);"];
+  var colors = ["hsl(25, 85%, 65%)", "hsl(55, 85%, 65%)",
+"hsl(90, 85%, 65%)", "hsl(160, 85%, 65%)", "hsl(220, 85%, 65%)",
+"hsl(265, 85%, 65%)", "hsl(310, 85%, 65%)", "hsl(360, 85%, 65%)"];
 
   if (value > 0 && value < 9) {
     return colors[value-1];
@@ -91,23 +91,28 @@ MatchGame.flipCard = function($card, $game) {
   var cardData = $card.data("cardData");
   var flippedCards = $game.data("flippedCards");
 
-  if (cardData.flipped) {
-    return;
-  }
-
   if (!cardData.flipped) {
     // set to flipped
     updateCard($card, cardData, true, cardData.color, cardData.value);
-    flippedCards.push(cardData);
+    flippedCards.push($card);
   }
 
   if (flippedCards.length === 2) {
-    if (flippedCards[0].value === flippedCards[1].value) {
-      updateCard($card, cardData, true, "rgb(153, 153, 153);", "");
+    var flipCardData1 = flippedCards[0].data("cardData");
+    var flipCardData2 = flippedCards[1].data("cardData");
+
+    if (flipCardData1.value === flipCardData2.value) {
+      // updateCard(flippedCards[0], flipCardData1, true, "rgb(153, 153, 153);", flipCardData1.value);
+      // updateCard(flippedCards[1], flipCardData2, true, "rgb(153, 153, 153);", flipCardData2.value);
+      updateCard(flippedCards[0], flipCardData1, true, "rgb(153, 153, 153)", flipCardData1.value);
+      updateCard(flippedCards[1], flipCardData2, true, "rgb(153, 153, 153)", flipCardData2.value);
     }
     else {
-      // reset card
-      updateCard($card, cardData, false, "rgb(32, 64, 86);", "");
+      // reset cards
+      setTimeout(function() {
+        updateCard(flippedCards[0], flipCardData1, false, "rgb(32, 64, 86)", "");
+        updateCard(flippedCards[1], flipCardData2, false, "rgb(32, 64, 86)", "");
+      }, 350);
     }
     // reset array of flipped cards
     $game.data("flippedCards", []);
@@ -116,7 +121,9 @@ MatchGame.flipCard = function($card, $game) {
 
 function updateCard($card, cardData, newFlipValue, newColorValue, newValue) {
   cardData.flipped = newFlipValue;
-  $card.css("background-color", newColorValue);
+  // $card.css("background-color", newColorValue); // <-- not working
+  //$card.css("backgroundColor", newColorValue); // working
+  $card.css({"background-color":newColorValue}); // working
   $card.text(newValue);
-  $card.Data("cardData", cardData);
+  $card.data("cardData", cardData);
 }
